@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\Root.Build.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net472;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
+    <AssemblyName>SockudoServer</AssemblyName>
+    <PackageId>SockudoServer</PackageId>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(SignAssembly) == 'true'">
+    <AssemblyOriginatorKeyFile>..\SockudoServer.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Properties\icon-128.png" Pack="true" PackagePath="\" />
+    <None Include="..\README.md" Link="Properties\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\CHANGELOG.md" Link="Properties\CHANGELOG.md" Pack="true" PackagePath="\" />
+    <None Include="..\SockudoServer.public.snk" Link="Properties\SockudoServer.public.snk" Pack="true" PackagePath="\" />
+    <Compile Remove="Properties\AssemblyInfo.Signed.cs" Condition="$(SignAssembly) != 'true'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(SignAssembly) == 'true'">
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <None Include="..\SockudoServer.snk" Link="SockudoServer.snk" Pack="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NaCl.Net" Version="0.1.13" />
+  </ItemGroup>
+
+</Project>
