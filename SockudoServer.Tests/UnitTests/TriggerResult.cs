@@ -45,7 +45,7 @@ namespace SockudoServer.Tests.UnitTests
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void it_should_not_accept_a_null_response()
         {
             new TriggerResult(null, null);
@@ -66,7 +66,7 @@ namespace SockudoServer.Tests.UnitTests
         }
 
         [Test]
-        [ExpectedException(typeof (TriggerResponseException))]
+        [ExpectedException(typeof(TriggerResponseException))]
         public void it_should_treat_non_JSON_content_in_the_request_body_as_a_failed_request()
         {
             HttpResponseMessage response = Substitute.For<HttpResponseMessage>();
@@ -86,7 +86,7 @@ namespace SockudoServer.Tests.UnitTests
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
+        [ExpectedException(typeof(NotSupportedException))]
         public void it_should_not_be_possible_to_change_EventIds()
         {
             HttpResponseMessage response = Substitute.For<HttpResponseMessage>();

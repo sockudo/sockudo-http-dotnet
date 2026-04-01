@@ -2,7 +2,7 @@
 
 namespace SockudoServer.Tests.Helpers
 {
-    internal class InMemoryUserAuthenticator: IUserAuthenticator
+    internal class InMemoryUserAuthenticator : IUserAuthenticator
     {
         private readonly SockudoServer.Pusher _pusher;
         private readonly UserData _userData;

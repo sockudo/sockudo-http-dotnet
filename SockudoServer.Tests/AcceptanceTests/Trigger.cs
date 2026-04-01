@@ -124,7 +124,7 @@ namespace SockudoServer.Tests.AcceptanceTests
             {
                 await pusher.TriggerAsync(largeEvent[0].Channel, largeEvent[0].EventName, largeEvent[0]).ConfigureAwait(false);
             }
-            catch(EventDataSizeExceededException e)
+            catch (EventDataSizeExceededException e)
             {
                 Assert.AreEqual(largeEvent[0].Channel, e.ChannelName, nameof(e.ChannelName));
                 Assert.AreEqual(largeEvent[0].EventName, e.EventName, nameof(e.EventName));

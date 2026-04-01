@@ -48,9 +48,9 @@ namespace SockudoServer.Tests.UnitTests
         [Test]
         public void the_default_cluster_is_null()
         {
-          var options = new PusherOptions();
+            var options = new PusherOptions();
 
-          Assert.AreEqual(null, options.Cluster);
+            Assert.AreEqual(null, options.Cluster);
         }
 
         [Test]
@@ -65,10 +65,10 @@ namespace SockudoServer.Tests.UnitTests
         [Test]
         public void the_new_cluster_should_be_used_to_create_the_base_url()
         {
-          var options= new PusherOptions();
-          options.Cluster = "eu";
+            var options = new PusherOptions();
+            options.Cluster = "eu";
 
-          StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -93,36 +93,36 @@ namespace SockudoServer.Tests.UnitTests
         [Test]
         public void the_new_cluster_should_be_used_to_create_the_base_url_when_its_encrypted_and_has_a_custom_port()
         {
-          var options = new PusherOptions();
-          options.Encrypted = true;
-          options.Cluster = "eu";
-          options.Port = 100;
+            var options = new PusherOptions();
+            options.Encrypted = true;
+            options.Cluster = "eu";
+            options.Port = 100;
 
-          StringAssert.IsMatch("https://api-eu.pusher.com:100", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("https://api-eu.pusher.com:100", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
         public void the_cluster_should_be_ignored_when_host_name_is_set_first()
         {
-          var options = new PusherOptions();
-          options.HostName = "api.my.domain.com";
-          options.Cluster = "eu";
+            var options = new PusherOptions();
+            options.HostName = "api.my.domain.com";
+            options.Cluster = "eu";
 
-          StringAssert.IsMatch("http://api.my.domain.com", options.GetBaseUrl().AbsoluteUri);
-          Assert.AreEqual(null, options.Cluster);
+            StringAssert.IsMatch("http://api.my.domain.com", options.GetBaseUrl().AbsoluteUri);
+            Assert.AreEqual(null, options.Cluster);
         }
 
         [Test]
         public void the_cluster_should_be_ignored_when_host_name_is_set_after()
         {
-          var options = new PusherOptions();
+            var options = new PusherOptions();
 
-          options.Cluster = "eu";
-          StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
+            options.Cluster = "eu";
+            StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
 
-          options.HostName = "api.my.domain.com";
-          StringAssert.IsMatch("http://api.my.domain.com", options.GetBaseUrl().AbsoluteUri);
-          Assert.AreEqual(null, options.Cluster);
+            options.HostName = "api.my.domain.com";
+            StringAssert.IsMatch("http://api.my.domain.com", options.GetBaseUrl().AbsoluteUri);
+            Assert.AreEqual(null, options.Cluster);
         }
 
         [Test]

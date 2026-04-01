@@ -21,7 +21,7 @@ namespace SockudoServer
             }
 
             var bodyAsString = body as string;
-            if(bodyAsString == null)
+            if (bodyAsString == null)
             {
                 throw new ArgumentException("The RawBodySerializer only supports strings for messages.  The body type was: " + body.GetType().Name, "body");
             }

@@ -30,7 +30,7 @@ namespace SockudoServer.Tests.Helpers
             await pusherClient.ConnectAsync().ConfigureAwait(false);
 
             AutoResetEvent subscribedEvent = new AutoResetEvent(false);
-            await pusherClient.SubscribeAsync(channelName, (sender) => { subscribedEvent.Set(); } ).ConfigureAwait(false);
+            await pusherClient.SubscribeAsync(channelName, (sender) => { subscribedEvent.Set(); }).ConfigureAwait(false);
             subscribedEvent.WaitOne(TimeSpan.FromSeconds(5));
         }
 

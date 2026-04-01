@@ -2,12 +2,12 @@
 
 namespace SockudoServer.Tests.Helpers
 {
-    internal class InMemoryChannelAuthorizer: IChannelAuthorizer
+    internal class InMemoryChannelAuthorizer : IChannelAuthorizer
     {
         private readonly SockudoServer.Pusher _pusher;
         private readonly PresenceChannelData _presenceData;
 
-        public InMemoryChannelAuthorizer(SockudoServer.Pusher pusher):
+        public InMemoryChannelAuthorizer(SockudoServer.Pusher pusher) :
             this(pusher, null)
         {
         }

@@ -5,7 +5,7 @@ namespace SockudoServer
     /// <summary>
     /// Interface for Trigger Request Results
     /// </summary>
-    public interface ITriggerResult: IRequestResult
+    public interface ITriggerResult : IRequestResult
     {
         /// <summary>
         /// Gets the Event IDs related to this Trigger Event

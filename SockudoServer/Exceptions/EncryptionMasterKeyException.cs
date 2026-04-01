@@ -12,7 +12,7 @@ namespace SockudoServer.Exceptions
         /// </summary>
         /// <param name="paramName">The name of the parameter that causes this exception.</param>
         /// <param name="actualValue">The length of the key that causes this exception.</param>
-        public EncryptionMasterKeyException(string paramName, int actualValue) 
+        public EncryptionMasterKeyException(string paramName, int actualValue)
             : base(paramName, actualValue, $"The encryption master key is expected to be {ValidationHelper.ENCRYPTION_MASTER_KEY_LENGTH} bytes in length.")
         {
         }

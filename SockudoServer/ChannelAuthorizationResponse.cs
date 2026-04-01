@@ -3,7 +3,7 @@
 namespace SockudoServer
 {
     [DataContract]
-    class ChannelAuthorizationResponse: IChannelAuthorizationResponse, IAuthenticationData
+    class ChannelAuthorizationResponse : IChannelAuthorizationResponse, IAuthenticationData
     {
         private readonly string _appKey;
         private readonly string _appSecret;
@@ -48,7 +48,7 @@ namespace SockudoServer
                     var presenceJson = DefaultSerializer.Default.Serialize(_presenceData);
                     stringToSign += ":" + presenceJson;
                 }
-                
+
                 return _appKey + ":" + CryptoHelper.GetHmac256(_appSecret, stringToSign);
             }
         }

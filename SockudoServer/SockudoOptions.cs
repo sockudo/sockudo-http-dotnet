@@ -67,17 +67,18 @@ namespace SockudoServer
         /// <inheritDoc/>
         public string Cluster
         {
-          get
-          {
-            return _cluster;
-          }
-          set
-          {
-            if (_hostSet == false) {
-              _cluster = value;
-              _hostName = "api-"+_cluster+".sockudo.io";
+            get
+            {
+                return _cluster;
             }
-          }
+            set
+            {
+                if (_hostSet == false)
+                {
+                    _cluster = value;
+                    _hostName = "api-" + _cluster + ".sockudo.io";
+                }
+            }
         }
 
         /// <inheritDoc/>

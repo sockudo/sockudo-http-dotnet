@@ -52,7 +52,7 @@ namespace SockudoServer.Tests.UnitTests
             var webHook = new WebHook(secret, validSignature, body);
             Assert.AreEqual("test_channel", webHook.Events[0]["channel"]);
             Assert.AreEqual("channel_occupied", webHook.Events[0]["name"]);
-            
+
             Assert.AreEqual("test_channel2", webHook.Events[1]["channel"]);
             Assert.AreEqual("channel_vacated", webHook.Events[1]["name"]);
         }

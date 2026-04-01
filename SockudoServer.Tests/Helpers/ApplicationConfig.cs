@@ -19,8 +19,8 @@
         public string Cluster { get; set; } = "mt1";
 
         /// <inheritdoc/>
-        public string HttpHost 
-        { 
+        public string HttpHost
+        {
             get
             {
                 return $"api-{Cluster}.pusher.com";
