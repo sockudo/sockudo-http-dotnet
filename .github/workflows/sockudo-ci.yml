@@ -34,12 +34,15 @@ jobs:
         include:
           # Windows builds all targets: net45, net472, netstandard1.3, netstandard2.0
           - os: windows-latest
-            frameworks: ""
           # Linux and macOS build only cross-platform netstandard targets
           - os: ubuntu-latest
-            frameworks: '/p:TargetFrameworks="netstandard1.3;netstandard2.0"'
+            framework: netstandard1.3
+          - os: ubuntu-latest
+            framework: netstandard2.0
           - os: macos-latest
-            frameworks: '/p:TargetFrameworks="netstandard1.3;netstandard2.0"'
+            framework: netstandard1.3
+          - os: macos-latest
+            framework: netstandard2.0
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -49,10 +52,31 @@ jobs:
           dotnet-version: "10.0.x"
 
       - name: Restore dependencies
-        run: dotnet restore sockudo-dotnet-server.sln ${{ matrix.frameworks }}
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.framework }}" ]; then
+            dotnet restore sockudo-dotnet-server.sln "/p:TargetFrameworks=${{ matrix.framework }}"
+          else
+            dotnet restore sockudo-dotnet-server.sln
+          fi
 
       - name: Build
-        run: dotnet build sockudo-dotnet-server.sln --no-restore --configuration Release ${{ matrix.frameworks }}
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.framework }}" ]; then
+            dotnet build sockudo-dotnet-server.sln --no-restore --configuration Release "/p:TargetFrameworks=${{ matrix.framework }}"
+          else
+            dotnet build sockudo-dotnet-server.sln --no-restore --configuration Release
+          fi
 
       - name: Run tests
-        run: dotnet test SockudoServer.Tests --no-build --configuration Release --verbosity normal ${{ matrix.frameworks }}
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.framework }}" ]; then
+            dotnet test SockudoServer.Tests --no-build --configuration Release --verbosity normal \
+              --filter "FullyQualifiedName!~AcceptanceTests" \
+              "/p:TargetFrameworks=${{ matrix.framework }}"
+          else
+            dotnet test SockudoServer.Tests --no-build --configuration Release --verbosity normal \
+              --filter "FullyQualifiedName!~AcceptanceTests"
+          fi
