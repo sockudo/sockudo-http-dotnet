@@ -17,6 +17,7 @@ namespace SockudoServer
     {
         private const string ChannelUsersResource = "/channels/{0}/users";
         private const string ChannelResource = "/channels/{0}";
+        private const string ChannelHistoryResource = "/channels/{0}/history";
         private const string MultipleChannelsResource = "/channels";
 
         private readonly string _appKey;
@@ -395,6 +396,18 @@ namespace SockudoServer
         public async Task<IGetResult<T>> FetchStateForChannelsAsync<T>(object info = null)
         {
             var request = _factory.Build(SockudoMethod.GET, MultipleChannelsResource, info);
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
+        }
+
+        /// <inheritDoc/>
+        public async Task<IGetResult<T>> FetchHistoryForChannelAsync<T>(string channelName, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+
+            var request = _factory.Build(SockudoMethod.GET, string.Format(ChannelHistoryResource, channelName), parameters);
 
             var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
 

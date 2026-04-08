@@ -278,6 +278,20 @@ IGetResult<object> result =
     await sockudo.FetchUsersFromPresenceChannelAsync<object>("my_channel");
 ```
 
+### Getting channel history
+
+```csharp
+IGetResult<object> page =
+    await sockudo.FetchHistoryForChannelAsync<object>(
+        "my_channel",
+        new { limit = 50, direction = "newest_first" });
+
+IGetResult<object> nextPage =
+    await sockudo.FetchHistoryForChannelAsync<object>(
+        "my_channel",
+        new { cursor = "opaque-cursor-from-previous-page" });
+```
+
 ## Webhooks
 
 Sockudo sends webhooks based on your application's configuration. Validate and consume them as follows:

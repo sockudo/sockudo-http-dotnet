@@ -139,5 +139,13 @@ namespace PusherServer
         /// <typeparam name="T">The type of object that will be returned by the API</typeparam>
         /// <param name="info">An object containing a list of attributes to include in the query</param>
         Task<IGetResult<T>> FetchStateForChannelsAsync<T>(object info);
+
+        /// <summary>
+        /// Queries durable history for a channel asynchronously.
+        /// </summary>
+        /// <typeparam name="T">The type of object that will be returned by the API</typeparam>
+        /// <param name="channelName">The name of the channel to query</param>
+        /// <param name="parameters">History query parameters such as limit, direction, cursor, start_serial, end_serial, start_time_ms and end_time_ms</param>
+        Task<IGetResult<T>> FetchHistoryForChannelAsync<T>(string channelName, object parameters = null);
     }
 }
