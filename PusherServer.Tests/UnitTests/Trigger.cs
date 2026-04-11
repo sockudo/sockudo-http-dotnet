@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using PusherServer.Exceptions;
@@ -491,16 +492,15 @@ namespace PusherServer.Tests.UnitTests
 
         private bool CheckRequestContainsPayload(IPusherRestRequest request, string channelName, string eventName, object eventData)
         {
-            var expectedBody = new TriggerBody()
-            {
-                name = eventName,
-                channels = new[] { channelName },
-                data = DefaultSerializer.Default.Serialize(eventData)
-            };
+            var payload = JObject.Parse(request.GetContentAsJsonString());
+            var expectedData = JToken.Parse(DefaultSerializer.Default.Serialize(eventData));
+            var actualData = JToken.Parse(payload.Value<string>("data"));
 
-            var expected = DefaultSerializer.Default.Serialize(expectedBody);
-
-            return request.GetContentAsJsonString().Contains(expected);
+            return payload.Value<string>("name") == eventName &&
+                   payload["channels"] is JArray channels &&
+                   channels.Count == 1 &&
+                   channels[0]?.Value<string>() == channelName &&
+                   JToken.DeepEquals(actualData, expectedData);
         }
 
         private async Task<ITriggerResult> TriggerWithSocketId(string socketId)

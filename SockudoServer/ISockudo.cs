@@ -147,5 +147,21 @@ namespace SockudoServer
         /// <param name="channelName">The name of the channel to query</param>
         /// <param name="parameters">History query parameters such as limit, direction, cursor, start_serial, end_serial, start_time_ms and end_time_ms</param>
         Task<IGetResult<T>> FetchHistoryForChannelAsync<T>(string channelName, object parameters = null);
+
+        /// <summary>
+        /// Queries presence history for a presence channel asynchronously.
+        /// </summary>
+        /// <typeparam name="T">The type of object that will be returned by the API</typeparam>
+        /// <param name="channelName">The presence channel to query</param>
+        /// <param name="parameters">Presence history query parameters such as limit, direction, cursor, start_serial, end_serial, start_time_ms and end_time_ms</param>
+        Task<IGetResult<T>> FetchPresenceHistoryForChannelAsync<T>(string channelName, object parameters = null);
+
+        /// <summary>
+        /// Queries a reconstructed presence snapshot for a presence channel asynchronously.
+        /// </summary>
+        /// <typeparam name="T">The type of object that will be returned by the API</typeparam>
+        /// <param name="channelName">The presence channel to query</param>
+        /// <param name="parameters">Snapshot query parameters such as at_time_ms and at_serial</param>
+        Task<IGetResult<T>> FetchPresenceSnapshotForChannelAsync<T>(string channelName, object parameters = null);
     }
 }

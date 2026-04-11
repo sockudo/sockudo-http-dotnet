@@ -15,6 +15,8 @@ namespace PusherServer
         private const string ChannelUsersResource = "/channels/{0}/users";
         private const string ChannelResource = "/channels/{0}";
         private const string ChannelHistoryResource = "/channels/{0}/history";
+        private const string PresenceHistoryResource = "/channels/{0}/presence/history";
+        private const string PresenceSnapshotResource = "/channels/{0}/presence/history/snapshot";
         private const string MultipleChannelsResource = "/channels";
 
         private readonly string _appKey;
@@ -304,6 +306,30 @@ namespace PusherServer
             ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
 
             var request = _factory.Build(PusherMethod.GET, string.Format(ChannelHistoryResource, channelName), parameters);
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
+        }
+
+        /// <inheritDoc/>
+        public async Task<IGetResult<T>> FetchPresenceHistoryForChannelAsync<T>(string channelName, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+
+            var request = _factory.Build(PusherMethod.GET, string.Format(PresenceHistoryResource, channelName), parameters);
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
+        }
+
+        /// <inheritDoc/>
+        public async Task<IGetResult<T>> FetchPresenceSnapshotForChannelAsync<T>(string channelName, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+
+            var request = _factory.Build(PusherMethod.GET, string.Format(PresenceSnapshotResource, channelName), parameters);
 
             var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
 

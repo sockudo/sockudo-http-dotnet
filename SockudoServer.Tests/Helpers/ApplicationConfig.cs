@@ -23,7 +23,7 @@
         {
             get
             {
-                return $"api-{Cluster}.pusher.com";
+                return $"api-{Cluster}.sockudo.io";
             }
         }
 
@@ -32,7 +32,7 @@
         {
             get
             {
-                return $"ws-{Cluster}.pusher.com";
+                return $"ws-{Cluster}.sockudo.io";
             }
         }
     }

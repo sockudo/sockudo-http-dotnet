@@ -7,7 +7,7 @@ namespace SockudoServer.RestfulClient
     /// <summary>
     /// A REST request to be made to the Sockudo API
     /// </summary>
-    public class SockudoRestRequest : ISockudoRestRequest
+    public class SockudoRestRequest : ISockudoRestRequest, IPusherRestRequest
     {
         /// <summary>
         /// Creates a new REST request to make back to the Sockudo server
@@ -24,6 +24,12 @@ namespace SockudoServer.RestfulClient
 
         /// <inheritdoc/>
         public SockudoMethod Method { get; set; }
+
+        PusherMethod IPusherRestRequest.Method
+        {
+            get => Method == SockudoMethod.GET ? PusherMethod.GET : PusherMethod.POST;
+            set => Method = value == PusherMethod.GET ? SockudoMethod.GET : SockudoMethod.POST;
+        }
 
         /// <inheritdoc/>
         public string ResourceUri { get; }

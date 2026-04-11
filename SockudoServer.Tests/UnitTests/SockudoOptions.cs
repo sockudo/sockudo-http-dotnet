@@ -42,7 +42,7 @@ namespace SockudoServer.Tests.UnitTests
         {
             var options = new PusherOptions();
 
-            StringAssert.IsMatch("http://api.pusherapp.com", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("http://api.sockudo.io", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace SockudoServer.Tests.UnitTests
             var options = new PusherOptions();
             options.Encrypted = true;
 
-            StringAssert.IsMatch("https://api.pusherapp.com", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("https://api.sockudo.io", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace SockudoServer.Tests.UnitTests
             var options = new PusherOptions();
             options.Cluster = "eu";
 
-            StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("http://api-eu.sockudo.io", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -77,7 +77,7 @@ namespace SockudoServer.Tests.UnitTests
             var options = new PusherOptions();
             options.Port = 100;
 
-            StringAssert.IsMatch("http://api.pusherapp.com:100", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("http://api.sockudo.io:100", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace SockudoServer.Tests.UnitTests
             options.Encrypted = true;
             options.Port = 100;
 
-            StringAssert.IsMatch("https://api.pusherapp.com:100", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("https://api.sockudo.io:100", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace SockudoServer.Tests.UnitTests
             options.Cluster = "eu";
             options.Port = 100;
 
-            StringAssert.IsMatch("https://api-eu.pusher.com:100", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("https://api-eu.sockudo.io:100", options.GetBaseUrl().AbsoluteUri);
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace SockudoServer.Tests.UnitTests
             var options = new PusherOptions();
 
             options.Cluster = "eu";
-            StringAssert.IsMatch("http://api-eu.pusher.com", options.GetBaseUrl().AbsoluteUri);
+            StringAssert.IsMatch("http://api-eu.sockudo.io", options.GetBaseUrl().AbsoluteUri);
 
             options.HostName = "api.my.domain.com";
             StringAssert.IsMatch("http://api.my.domain.com", options.GetBaseUrl().AbsoluteUri);
@@ -130,7 +130,7 @@ namespace SockudoServer.Tests.UnitTests
         public void https_scheme_is_not_allowed_when_setting_host()
         {
             var httpsOptions = new PusherOptions();
-            httpsOptions.HostName = "https://api.pusherapp.com";
+            httpsOptions.HostName = "https://api.sockudo.io";
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace SockudoServer.Tests.UnitTests
         public void http_scheme_is_not_allowed_when_setting_host()
         {
             var httpsOptions = new PusherOptions();
-            httpsOptions.HostName = "http://api.pusherapp.com";
+            httpsOptions.HostName = "http://api.sockudo.io";
         }
 
         [Test]
@@ -146,7 +146,7 @@ namespace SockudoServer.Tests.UnitTests
         public void ftp_scheme_is_not_allowed_when_setting_host()
         {
             var httpsOptions = new PusherOptions();
-            httpsOptions.HostName = "ftp://api.pusherapp.com";
+            httpsOptions.HostName = "ftp://api.sockudo.io";
         }
 
         [Test]

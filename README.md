@@ -292,6 +292,25 @@ IGetResult<object> nextPage =
         new { cursor = "opaque-cursor-from-previous-page" });
 ```
 
+### Getting presence history and snapshots
+
+```csharp
+IGetResult<object> presencePage =
+    await sockudo.FetchPresenceHistoryForChannelAsync<object>(
+        "presence_my_channel",
+        new { limit = 50, direction = "newest_first" });
+
+IGetResult<object> presenceNextPage =
+    await sockudo.FetchPresenceHistoryForChannelAsync<object>(
+        "presence_my_channel",
+        new { cursor = "opaque-cursor-from-previous-page" });
+
+IGetResult<object> presenceSnapshot =
+    await sockudo.FetchPresenceSnapshotForChannelAsync<object>(
+        "presence_my_channel",
+        new { at_serial = 4 });
+```
+
 ## Webhooks
 
 Sockudo sends webhooks based on your application's configuration. Validate and consume them as follows:

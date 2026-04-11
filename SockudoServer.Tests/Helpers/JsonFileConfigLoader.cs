@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -25,7 +25,7 @@ namespace SockudoServer.Tests.Helpers
         /// <param name="fileName">The location of the file that contains the settings.</param>
         public JsonFileConfigLoader(string fileName)
         {
-            this.FileName = fileName;
+            FileName = fileName;
         }
 
         public static IApplicationConfigLoader Default { get; } = new JsonFileConfigLoader();
@@ -39,18 +39,17 @@ namespace SockudoServer.Tests.Helpers
         /// Loads test configuration from a json file.
         /// </summary>
         /// <returns>An <see cref="IApplicationConfig"/> instance.</returns>
-        /// <exception cref="FileNotFoundException">Thrown when the json settings file does not exist.</exception>
         public IApplicationConfig Load()
         {
-            FileInfo fileInfo = new FileInfo(this.FileName);
+            FileInfo fileInfo = new FileInfo(FileName);
             if (!fileInfo.Exists)
             {
-                throw new FileNotFoundException($"The JSON test application configuration file was not found at location {fileInfo.FullName}.", fileName: this.FileName);
+                return new ApplicationConfig();
             }
 
             string content = File.ReadAllText(fileInfo.FullName);
             ApplicationConfig result = JsonConvert.DeserializeObject<ApplicationConfig>(content);
-            return result;
+            return result ?? new ApplicationConfig();
         }
     }
 }

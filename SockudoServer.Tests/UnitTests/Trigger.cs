@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using SockudoServer.Exceptions;
@@ -56,7 +57,7 @@ namespace SockudoServer.Tests.UnitTests
 
             _pusher = new Pusher(_config.AppId, _config.AppKey, _config.AppSecret, options);
 
-            _subPusherClient.ExecutePostAsync(Arg.Any<IPusherRestRequest>()).Returns(Task.FromResult(new TriggerResult(_v8ProtocolSuccessfulResponse, TriggerResultHelper.TRIGGER_RESPONSE_JSON)));
+            _subPusherClient.ExecutePostAsync(Arg.Any<ISockudoRestRequest>()).Returns(Task.FromResult(new TriggerResult(_v8ProtocolSuccessfulResponse, TriggerResultHelper.TRIGGER_RESPONSE_JSON)));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.ResourceUri.StartsWith("/apps/" + _config.AppId + "/events?")
                 )
             );
@@ -81,7 +82,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => CheckRequestContainsPayload(x, _channelName, _eventName, _eventData)
                 )
             );
@@ -93,7 +94,7 @@ namespace SockudoServer.Tests.UnitTests
             await _pusher.TriggerAsync(_channelName, _eventName, _eventData).ConfigureAwait(false);
 
 #pragma warning disable 4014
-            _subPusherClient.Received().ExecutePostAsync(Arg.Any<IPusherRestRequest>());
+            _subPusherClient.Received().ExecutePostAsync(Arg.Any<ISockudoRestRequest>());
 #pragma warning restore 4014
         }
 
@@ -103,7 +104,7 @@ namespace SockudoServer.Tests.UnitTests
             await _pusher.TriggerAsync(_channelName, _eventName, _eventData).ConfigureAwait(false);
 
 #pragma warning disable 4014
-            _subPusherClient.Received().ExecutePostAsync(Arg.Any<IPusherRestRequest>());
+            _subPusherClient.Received().ExecutePostAsync(Arg.Any<ISockudoRestRequest>());
 #pragma warning restore 4014
         }
 
@@ -113,7 +114,7 @@ namespace SockudoServer.Tests.UnitTests
             await _pusher.TriggerAsync(new[] { "fish", "pie" }, _eventName, _eventData).ConfigureAwait(false);
 
 #pragma warning disable 4014
-            _subPusherClient.Received().ExecutePostAsync(Arg.Any<IPusherRestRequest>());
+            _subPusherClient.Received().ExecutePostAsync(Arg.Any<ISockudoRestRequest>());
 #pragma warning restore 4014
         }
 
@@ -123,7 +124,7 @@ namespace SockudoServer.Tests.UnitTests
             await _pusher.TriggerAsync(new[] { "fish", "pie" }, _eventName, _eventData).ConfigureAwait(false);
 
 #pragma warning disable 4014
-            _subPusherClient.Received().ExecutePostAsync(Arg.Any<IPusherRestRequest>());
+            _subPusherClient.Received().ExecutePostAsync(Arg.Any<ISockudoRestRequest>());
 #pragma warning restore 4014
         }
 
@@ -140,7 +141,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => CheckRequestContainsSocketIdParameter(x, expectedSocketId)
                 )
             );
@@ -162,7 +163,7 @@ namespace SockudoServer.Tests.UnitTests
             ).ConfigureAwait(false);
 
 #pragma warning disable 4014
-            _subPusherClient.Received().ExecutePostAsync(Arg.Is<IPusherRestRequest>(
+            _subPusherClient.Received().ExecutePostAsync(Arg.Is<ISockudoRestRequest>(
 #pragma warning restore 4014
                 x => CheckRequestContainsSocketIdParameter(x, expectedSocketId)
                 )
@@ -182,7 +183,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => CheckRequestContainsSocketIdParameter(x, expectedSocketId)
                 )
             );
@@ -206,7 +207,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => CheckRequestContainsSocketIdParameter(x, expectedSocketId)
                 )
             );
@@ -502,7 +503,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.GetContentAsJsonString().Contains("idempotency_key") &&
                          x.GetContentAsJsonString().Contains(idempotencyKey) &&
                          x.Headers.ContainsKey("X-Idempotency-Key") &&
@@ -524,7 +525,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.GetContentAsJsonString().Contains("idempotency_key") &&
                          x.GetContentAsJsonString().Contains(idempotencyKey) &&
                          x.Headers.ContainsKey("X-Idempotency-Key") &&
@@ -541,9 +542,10 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
-                    x => !x.GetContentAsJsonString().Contains("idempotency_key") &&
-                         x.Headers.Count == 0
+                Arg.Is<ISockudoRestRequest>(
+                    x => x.GetContentAsJsonString().Contains("idempotency_key") &&
+                         x.Headers.ContainsKey("X-Idempotency-Key") &&
+                         !string.IsNullOrWhiteSpace(x.Headers["X-Idempotency-Key"])
                 )
             );
         }
@@ -565,7 +567,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecutePostAsync(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.GetContentAsJsonString().Contains(key1) &&
                          x.GetContentAsJsonString().Contains(key2) &&
                          x.GetContentAsJsonString().Contains("idempotency_key")
@@ -590,18 +592,17 @@ namespace SockudoServer.Tests.UnitTests
             Assert.AreNotEqual(key1, key2, "Each call to GenerateIdempotencyKey should produce a unique value");
         }
 
-        private bool CheckRequestContainsPayload(IPusherRestRequest request, string channelName, string eventName, object eventData)
+        private bool CheckRequestContainsPayload(ISockudoRestRequest request, string channelName, string eventName, object eventData)
         {
-            var expectedBody = new TriggerBody()
-            {
-                name = eventName,
-                channels = new[] { channelName },
-                data = DefaultSerializer.Default.Serialize(eventData)
-            };
+            var payload = JObject.Parse(request.GetContentAsJsonString());
+            var expectedData = JToken.Parse(DefaultSerializer.Default.Serialize(eventData));
+            var actualData = JToken.Parse(payload.Value<string>("data"));
 
-            var expected = DefaultSerializer.Default.Serialize(expectedBody);
-
-            return request.GetContentAsJsonString().Contains(expected);
+            return payload.Value<string>("name") == eventName &&
+                   payload["channels"] is JArray channels &&
+                   channels.Count == 1 &&
+                   channels[0]?.Value<string>() == channelName &&
+                   JToken.DeepEquals(actualData, expectedData);
         }
 
         private async Task<ITriggerResult> TriggerWithSocketId(string socketId)
@@ -628,7 +629,7 @@ namespace SockudoServer.Tests.UnitTests
             return response;
         }
 
-        private static bool CheckRequestContainsSocketIdParameter(IPusherRestRequest request, string expectedSocketId)
+        private static bool CheckRequestContainsSocketIdParameter(ISockudoRestRequest request, string expectedSocketId)
         {
             var parameter = request.GetContentAsJsonString();
             return parameter.Contains("socket_id") &&
@@ -636,4 +637,3 @@ namespace SockudoServer.Tests.UnitTests
         }
     }
 }
-

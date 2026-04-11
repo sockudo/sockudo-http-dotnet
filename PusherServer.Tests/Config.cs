@@ -1,4 +1,6 @@
-﻿using PusherServer.Tests.Helpers;
+﻿using System;
+using NUnit.Framework;
+using PusherServer.Tests.Helpers;
 
 namespace PusherServer.Tests
 {
@@ -7,9 +9,20 @@ namespace PusherServer.Tests
         static Config()
         {
             IApplicationConfig config = EnvironmentVariableConfigLoader.Default.Load();
-            if (string.IsNullOrWhiteSpace(config.AppKey))
+            SkipReason = "Skipping live .NET server SDK tests: AppConfig.test.json is not configured for a real live endpoint.";
+            IsConfigured = IsRealConfig(config);
+
+            if (!IsConfigured)
             {
-                config = JsonFileConfigLoader.Default.Load();
+                try
+                {
+                    config = JsonFileConfigLoader.Default.Load();
+                    IsConfigured = IsRealConfig(config);
+                }
+                catch (IgnoreException ex)
+                {
+                    SkipReason = ex.Message;
+                }
             }
 
             AppId = config.AppId;
@@ -19,6 +32,10 @@ namespace PusherServer.Tests
             HttpHost = config.HttpHost;
             WebSocketHost = config.WebSocketHost;
         }
+
+        public static bool IsConfigured { get; private set; }
+
+        public static string SkipReason { get; private set; }
 
         public static string AppId { get; private set; }
 
@@ -31,5 +48,14 @@ namespace PusherServer.Tests
         public static string HttpHost { get; private set; }
 
         public static string WebSocketHost { get; private set; }
+
+        private static bool IsRealConfig(IApplicationConfig config)
+        {
+            return config != null &&
+                   !string.IsNullOrWhiteSpace(config.AppId) &&
+                   !string.IsNullOrWhiteSpace(config.AppKey) &&
+                   !string.IsNullOrWhiteSpace(config.AppSecret) &&
+                   !config.AppId.StartsWith("test-", StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

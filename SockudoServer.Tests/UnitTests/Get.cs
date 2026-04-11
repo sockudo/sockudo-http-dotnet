@@ -41,7 +41,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecuteGetAsync<object>(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.ResourceUri.StartsWith("/apps/" + _config.AppId + "/channels")
                 )
             );
@@ -55,8 +55,8 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecuteGetAsync<object>(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
-                    x => x.Method == PusherMethod.GET
+                Arg.Is<ISockudoRestRequest>(
+                    x => x.Method == SockudoMethod.GET
                 )
             );
         }
@@ -69,7 +69,7 @@ namespace SockudoServer.Tests.UnitTests
 #pragma warning disable 4014
             _subPusherClient.Received().ExecuteGetAsync<object>(
 #pragma warning restore 4014
-                Arg.Is<IPusherRestRequest>(
+                Arg.Is<ISockudoRestRequest>(
                     x => x.ResourceUri.Contains("&filter_by_prefix=presence-") &&
                          x.ResourceUri.Contains("&info=user_count")
                 )
