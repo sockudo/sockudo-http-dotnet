@@ -18,6 +18,11 @@ namespace SockudoServer
         private const string ChannelUsersResource = "/channels/{0}/users";
         private const string ChannelResource = "/channels/{0}";
         private const string ChannelHistoryResource = "/channels/{0}/history";
+        private const string MessageResource = "/channels/{0}/messages/{1}";
+        private const string MessageVersionsResource = "/channels/{0}/messages/{1}/versions";
+        private const string MessageUpdateResource = "/channels/{0}/messages/{1}/update";
+        private const string MessageDeleteResource = "/channels/{0}/messages/{1}/delete";
+        private const string MessageAppendResource = "/channels/{0}/messages/{1}/append";
         private const string PresenceHistoryResource = "/channels/{0}/presence/history";
         private const string PresenceSnapshotResource = "/channels/{0}/presence/history/snapshot";
         private const string MultipleChannelsResource = "/channels";
@@ -414,6 +419,71 @@ namespace SockudoServer
             var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
 
             return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> GetMessageAsync<T>(string channelName, string messageSerial)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.GET, string.Format(MessageResource, channelName, messageSerial));
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> GetMessageVersionsAsync<T>(string channelName, string messageSerial, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.GET, string.Format(MessageVersionsResource, channelName, messageSerial), parameters);
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> UpdateMessageAsync<T>(string channelName, string messageSerial, object body)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.POST, string.Format(MessageUpdateResource, channelName, messageSerial), requestBody: body);
+
+            var response = await _options.RestClient.ExecutePostAsync(request).ConfigureAwait(false);
+
+            return new GetResult<T>(response.Response, response.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> DeleteMessageAsync<T>(string channelName, string messageSerial, object body = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.POST, string.Format(MessageDeleteResource, channelName, messageSerial), requestBody: body);
+
+            var response = await _options.RestClient.ExecutePostAsync(request).ConfigureAwait(false);
+
+            return new GetResult<T>(response.Response, response.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> AppendMessageAsync<T>(string channelName, string messageSerial, object body)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.POST, string.Format(MessageAppendResource, channelName, messageSerial), requestBody: body);
+
+            var response = await _options.RestClient.ExecutePostAsync(request).ConfigureAwait(false);
+
+            return new GetResult<T>(response.Response, response.Body);
         }
 
         /// <inheritDoc/>

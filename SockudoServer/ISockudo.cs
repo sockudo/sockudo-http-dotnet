@@ -149,6 +149,31 @@ namespace SockudoServer
         Task<IGetResult<T>> FetchHistoryForChannelAsync<T>(string channelName, object parameters = null);
 
         /// <summary>
+        /// Fetches the latest visible version of a mutable message asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> GetMessageAsync<T>(string channelName, string messageSerial);
+
+        /// <summary>
+        /// Fetches preserved versions of a mutable message asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> GetMessageVersionsAsync<T>(string channelName, string messageSerial, object parameters = null);
+
+        /// <summary>
+        /// Applies a mutable-message update asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> UpdateMessageAsync<T>(string channelName, string messageSerial, object body);
+
+        /// <summary>
+        /// Applies a mutable-message delete asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> DeleteMessageAsync<T>(string channelName, string messageSerial, object body = null);
+
+        /// <summary>
+        /// Applies a mutable-message append asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> AppendMessageAsync<T>(string channelName, string messageSerial, object body);
+
+        /// <summary>
         /// Queries presence history for a presence channel asynchronously.
         /// </summary>
         /// <typeparam name="T">The type of object that will be returned by the API</typeparam>
