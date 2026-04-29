@@ -121,5 +121,30 @@ namespace SockudoServer.RestfulClient
 
             return result;
         }
+
+        ///<inheritDoc/>
+        public async Task<TriggerResult> ExecuteDeleteAsync(ISockudoRestRequest sockudoRestRequest)
+        {
+            TriggerResult result = null;
+            if (sockudoRestRequest.Method == SockudoMethod.DELETE)
+            {
+                var requestMessage = new HttpRequestMessage(HttpMethod.Delete, sockudoRestRequest.ResourceUri);
+
+                if (sockudoRestRequest.Headers != null)
+                {
+                    foreach (var header in sockudoRestRequest.Headers)
+                    {
+                        requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value);
+                    }
+                }
+
+                var response = await _httpClient.SendAsync(requestMessage).ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                result = new TriggerResult(response, responseContent);
+            }
+
+            return result;
+        }
     }
 }

@@ -23,6 +23,8 @@ namespace SockudoServer
         private const string MessageUpdateResource = "/channels/{0}/messages/{1}/update";
         private const string MessageDeleteResource = "/channels/{0}/messages/{1}/delete";
         private const string MessageAppendResource = "/channels/{0}/messages/{1}/append";
+        private const string AnnotationEventsResource = "/channels/{0}/messages/{1}/annotations";
+        private const string AnnotationMutationResource = "/channels/{0}/messages/{1}/annotations/{2}";
         private const string PresenceHistoryResource = "/channels/{0}/presence/history";
         private const string PresenceSnapshotResource = "/channels/{0}/presence/history/snapshot";
         private const string MultipleChannelsResource = "/channels";
@@ -484,6 +486,46 @@ namespace SockudoServer
             var response = await _options.RestClient.ExecutePostAsync(request).ConfigureAwait(false);
 
             return new GetResult<T>(response.Response, response.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> PublishAnnotationAsync<T>(string channelName, string messageSerial, object body)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.POST, string.Format(AnnotationEventsResource, channelName, messageSerial), requestBody: body);
+
+            var response = await _options.RestClient.ExecutePostAsync(request).ConfigureAwait(false);
+
+            return new GetResult<T>(response.Response, response.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> DeleteAnnotationAsync<T>(string channelName, string messageSerial, string annotationSerial, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+            ThrowArgumentExceptionIfNullOrEmpty(annotationSerial, "annotationSerial");
+
+            var request = _factory.Build(SockudoMethod.DELETE, string.Format(AnnotationMutationResource, channelName, messageSerial, annotationSerial), parameters);
+
+            var response = await _options.RestClient.ExecuteDeleteAsync(request).ConfigureAwait(false);
+
+            return new GetResult<T>(response.Response, response.Body);
+        }
+
+        /// <inheritdoc/>
+        public async Task<IGetResult<T>> ListAnnotationsAsync<T>(string channelName, string messageSerial, object parameters = null)
+        {
+            ThrowArgumentExceptionIfNullOrEmpty(channelName, "channelName");
+            ThrowArgumentExceptionIfNullOrEmpty(messageSerial, "messageSerial");
+
+            var request = _factory.Build(SockudoMethod.GET, string.Format(AnnotationEventsResource, channelName, messageSerial), parameters);
+
+            var response = await _options.RestClient.ExecuteGetAsync<T>(request).ConfigureAwait(false);
+
+            return response;
         }
 
         /// <inheritDoc/>

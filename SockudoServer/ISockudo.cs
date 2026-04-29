@@ -174,6 +174,21 @@ namespace SockudoServer
         Task<IGetResult<T>> AppendMessageAsync<T>(string channelName, string messageSerial, object body);
 
         /// <summary>
+        /// Publishes an annotation for a versioned message asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> PublishAnnotationAsync<T>(string channelName, string messageSerial, object body);
+
+        /// <summary>
+        /// Deletes an annotation from a versioned message asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> DeleteAnnotationAsync<T>(string channelName, string messageSerial, string annotationSerial, object parameters = null);
+
+        /// <summary>
+        /// Lists raw annotation events for a versioned message asynchronously.
+        /// </summary>
+        Task<IGetResult<T>> ListAnnotationsAsync<T>(string channelName, string messageSerial, object parameters = null);
+
+        /// <summary>
         /// Queries presence history for a presence channel asynchronously.
         /// </summary>
         /// <typeparam name="T">The type of object that will be returned by the API</typeparam>

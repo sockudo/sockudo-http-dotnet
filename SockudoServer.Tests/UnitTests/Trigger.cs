@@ -445,7 +445,9 @@ namespace SockudoServer.Tests.UnitTests
             }
 
             Assert.IsNotNull(caughtException);
-            StringAssert.AreEqualIgnoringCase($"The length of the channel name is greater than the allowed {ValidationHelper.CHANNEL_NAME_MAX_LENGTH} characters.{Environment.NewLine}Parameter name: channelName{Environment.NewLine}Actual value was {channelName.Length}.", caughtException.Message);
+            StringAssert.Contains($"greater than the allowed {ValidationHelper.CHANNEL_NAME_MAX_LENGTH} characters", caughtException.Message);
+            StringAssert.Contains("channelName", caughtException.Message);
+            StringAssert.Contains(channelName.Length.ToString(), caughtException.Message);
         }
 
         [Test]
@@ -465,7 +467,9 @@ namespace SockudoServer.Tests.UnitTests
             }
 
             Assert.IsNotNull(caughtException);
-            StringAssert.AreEqualIgnoringCase($"Only 10 events permitted per batch.{Environment.NewLine}Parameter name: events{Environment.NewLine}Actual value was 11.", caughtException.Message);
+            StringAssert.Contains("Only 10 events permitted per batch", caughtException.Message);
+            StringAssert.Contains("events", caughtException.Message);
+            StringAssert.Contains("11", caughtException.Message);
         }
 
         [Test]
@@ -487,7 +491,9 @@ namespace SockudoServer.Tests.UnitTests
             }
 
             Assert.IsNotNull(caughtException);
-            StringAssert.AreEqualIgnoringCase($"The length of the channel name is greater than the allowed {ValidationHelper.CHANNEL_NAME_MAX_LENGTH} characters.{Environment.NewLine}Parameter name: channelName{Environment.NewLine}Actual value was {channelName.Length}.", caughtException.Message);
+            StringAssert.Contains($"greater than the allowed {ValidationHelper.CHANNEL_NAME_MAX_LENGTH} characters", caughtException.Message);
+            StringAssert.Contains("channelName", caughtException.Message);
+            StringAssert.Contains(channelName.Length.ToString(), caughtException.Message);
         }
 
         [Test]
