@@ -12,6 +12,10 @@
         /// <summary>
         /// Make a POST request
         /// </summary>
-        POST
+        POST,
+        /// <summary>
+        /// Make a DELETE request
+        /// </summary>
+        DELETE
     }
 }

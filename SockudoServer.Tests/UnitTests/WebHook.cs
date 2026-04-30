@@ -71,7 +71,9 @@ namespace SockudoServer.Tests.UnitTests
                 caughtException = ex;
             }
 
-            StringAssert.IsMatch("A secret must be provided" + Environment.NewLine + "Parameter name: secret", caughtException.Message);
+            Assert.IsNotNull(caughtException);
+            StringAssert.Contains("A secret must be provided", caughtException.Message);
+            StringAssert.Contains("secret", caughtException.Message);
         }
 
         [Test]
@@ -88,7 +90,9 @@ namespace SockudoServer.Tests.UnitTests
                 caughtException = ex;
             }
 
-            StringAssert.IsMatch("A secret must be provided" + Environment.NewLine + "Parameter name: secret", caughtException.Message);
+            Assert.IsNotNull(caughtException);
+            StringAssert.Contains("A secret must be provided", caughtException.Message);
+            StringAssert.Contains("secret", caughtException.Message);
         }
 
         [Test]

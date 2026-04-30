@@ -23,6 +23,13 @@ namespace SockudoServer.RestfulClient
         Task<TriggerResult> ExecutePostAsync(ISockudoRestRequest sockudoRestRequest);
 
         /// <summary>
+        /// Execute a REST DELETE request to the Sockudo API asynchronously
+        /// </summary>
+        /// <param name="sockudoRestRequest">The request to execute</param>
+        /// <returns>The response received from Sockudo</returns>
+        Task<TriggerResult> ExecuteDeleteAsync(ISockudoRestRequest sockudoRestRequest);
+
+        /// <summary>
         /// Gets the Base Url this client is using
         /// </summary>
         Uri BaseUrl { get; }
